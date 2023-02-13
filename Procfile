@@ -1,1 +1,0 @@
-web: gunicorn slrsite.wsgi
