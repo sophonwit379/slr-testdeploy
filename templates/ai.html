@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- css -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- icon= -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav_logo">
+            <a href="{% url 'index' %}"><img src="{% static 'logo.png' %}" alt=""> </a>
+            <a href="{% url 'index' %}">SLR <span>Project</span></a>
+        </div>
+        <form class="search_box" action="/search" method="GET">
+            <input type="text" name="search" placeholder="Search here">
+            <button type="submit" class="fa fa-search" id="submit_search" style="font-size: 20px;color: #fff; padding: 8px; border: 1px solid white;"></button>
+
+        </form>
+        <ul class="nav">
+            <!--  url 'name in path home/urls.py ' -->
+            <li><a href="{% url 'index' %}">หน้าหลัก</a></li>
+            <li><a href="{% url 'about' %}">เกี่ยวกับ</a></li>
+            <li><a href="{% url 'team' %}">ทีมผู้พัฒนา</a></li>
+            <li><a href="{% url 'ai' %}">ผลงานของเรา</a></li>
+            <li><a href="{% url 'action' %}">ท่าภาษามือ</a></li>
+
+        </ul>
+
+    </div>
+    <div class="section ai">
+        <h1>SLR language</h1>
+        <div class="ai-top">
+            <div class="top-left">
+                <h1 id="wait" >กล้องปิดการใช้งาน</h1>
+                <div class="frame">
+                    <img id="demo" src="{% static 'camera-off.svg' %}" alt="stream">
+                </div>
+            </div>
+            <div class="top-right" id ='top-right'>
+                <div class="btnnn">
+                    <button class="button-ai" onclick="video_on()">เปิดกล้อง</button>
+                    <button class="button-ai" onclick="video_off()">ปิดกล้อง</button>
+
+                </div>
+                <div class="result">ผลลัพธ์คือ : </div>
+                <div id="data"></div>
+            </div>
+        </div>
+
+        <!-- <a href="{% url 'index' %}"><button class="button-32">กลับสู่เว็บไซค์</button></a> -->
+        
+    </div>
+    <script>
+        var status=0
+        function video_on() {
+          status=1
+          document.getElementById("demo").src = "{% url 'stream' %}";
+          document.getElementById("wait").innerHTML = "กำลังเปิดกล้อง. . . . .";
+          document.getElementById("data").innerHTML =null;
+          setInterval(function(){
+            $.ajax({
+            type:"GET",
+            url: "ai/",
+            })
+            .done(Response =>{
+            const data=Response    
+            if(status==0){
+                data=null
+            }
+            document.getElementById("data").innerHTML =data['data']; 
+            })
+        },1000)
+          setTimeout(showText, 3000);
+        }
+        function showText(){
+          document.getElementById("wait").innerHTML = "กล้องกำลังเปิด";
+        }
+        function video_off() {
+          status=0
+          document.getElementById("demo").src = "{% static 'camera-off.svg' %}";
+          document.getElementById("wait").innerHTML = "Turned off";
+          document.getElementById("data").innerHTML =null;
+        }
+        
+        </script>
+</body>
+</html>
