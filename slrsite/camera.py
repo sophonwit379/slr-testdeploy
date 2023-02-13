@@ -5,7 +5,6 @@ import numpy as np
 import mediapipe as mp
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
-import tensorflow as tf
 
 ans=[]
 def setAns(x):
